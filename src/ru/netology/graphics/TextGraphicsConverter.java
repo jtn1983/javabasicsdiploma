@@ -28,15 +28,9 @@ public class TextGraphicsConverter implements ru.netology.graphics.image.TextGra
                 throw new BadImageSizeException(ratio, maxRatio);
             }
         }
-
-        double ratioW = (double) maxWidth / width;
-        double ratioH = (double) maxHeight / height;
-
-        int newWidth = (int) (width * Math.min(ratioW, ratioH));
-        int newHeight = (int) (height * Math.min(ratioW, ratioH));
-
-        if (newWidth == 0) newWidth = width;
-        if (newHeight == 0) newHeight = height;
+        
+        int newWidth = calculateNewWidthHeight(width, height)[0];
+        int newHeight = calculateNewWidthHeight(width, height)[1];
 
         Image scaledImage = img.getScaledInstance(newWidth, newHeight, BufferedImage.SCALE_SMOOTH);
         BufferedImage bwImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_BYTE_GRAY);
@@ -71,6 +65,16 @@ public class TextGraphicsConverter implements ru.netology.graphics.image.TextGra
         }
 
         return textImg.toString();
+    }
+
+    private int[] calculateNewWidthHeight (int width, int height) {
+        double ratioW = (double) maxWidth / width;
+        double ratioH = (double) maxHeight / height;
+        int newWidth = (int) (width * Math.min(ratioW, ratioH));
+        int newHeight = (int) (height * Math.min(ratioW, ratioH));
+        if (newWidth == 0) newWidth = width;
+        if (newHeight == 0) newHeight = height;
+        return new int[]{newWidth, newHeight};
     }
 
     @Override

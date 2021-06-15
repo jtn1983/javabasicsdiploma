@@ -17,10 +17,10 @@ public class Main {
         converter.setMaxWidth(200);
         server.start(); // Запускаем
 
-//        PrintWriter fileWriter = new PrintWriter(new File("converted-image.txt"));
-//        converter.setMaxWidth(100);
-//        converter.setMaxHeight(300);
-//        fileWriter.write(converter.convert("https://i.ibb.co/6DYM05G/edu0.jpg"));
-//        fileWriter.close();
+        PrintWriter fileWriter = new PrintWriter(new File("converted-image.txt"));
+        converter.setMaxWidth(100);
+        converter.setMaxHeight(300);
+        fileWriter.write(converter.convert("https://i.ibb.co/6DYM05G/edu0.jpg"));
+        fileWriter.close();
     }
 }
