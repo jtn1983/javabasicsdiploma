@@ -2,6 +2,7 @@ package ru.netology.graphics;
 
 import ru.netology.graphics.image.BadImageSizeException;
 import ru.netology.graphics.image.TextColorSchema;
+import ru.netology.graphics.image.TextGraphicsConverter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class TextGraphicsConverter implements ru.netology.graphics.image.TextGraphicsConverter {
+public class GraphicsConverter implements TextGraphicsConverter {
     private int maxWidth;
     private int maxHeight;
     private double maxRatio;
@@ -22,15 +23,20 @@ public class TextGraphicsConverter implements ru.netology.graphics.image.TextGra
         int width = img.getWidth();
         int height = img.getHeight();
 
+        if (width == 0 || height == 0) {
+            throw new BadImageSizeException();
+        }
+
         if (maxRatio != 0) {
             double ratio = (double) width / height;
             if (maxRatio < ratio) {
                 throw new BadImageSizeException(ratio, maxRatio);
             }
         }
-        
-        int newWidth = calculateNewWidthHeight(width, height)[0];
-        int newHeight = calculateNewWidthHeight(width, height)[1];
+
+        int[] newWidthHeight = calculateNewWidthHeight(width, height);
+        int newWidth = newWidthHeight[0];
+        int newHeight = newWidthHeight[1];
 
         Image scaledImage = img.getScaledInstance(newWidth, newHeight, BufferedImage.SCALE_SMOOTH);
         BufferedImage bwImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_BYTE_GRAY);
@@ -42,7 +48,7 @@ public class TextGraphicsConverter implements ru.netology.graphics.image.TextGra
         var bwRaster = bwImg.getRaster();
 
         if (schema == null) {
-            schema = new ru.netology.graphics.TextColorSchema();
+            schema = new ColorSchema();
         }
 
         char[][] textImage = new char[newHeight][newWidth];
